@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nick's Tech Tips</title>
+  <meta
+    name="description"
+    content="Nick's Tech Tips — practical content focused on home labs, cybersecurity, networking, and real-world IT."
+  />
+  <style>
+    :root {
+      --bg: #0b1220;
+      --bg-alt: #121b2e;
+      --card: rgba(18, 27, 46, 0.88);
+      --text: #eef4ff;
+      --muted: #a9b6cf;
+      --line: rgba(255,255,255,0.09);
+      --accent: #2f7cff;
+      --accent-2: #68a3ff;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      --radius: 20px;
+      --max: 1160px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(47,124,255,0.18), transparent 30%),
+        linear-gradient(180deg, #09101d 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(8, 13, 24, 0.75);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .hero {
+      padding: 4.5rem 0 2.25rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 1.4rem;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -40px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(47,124,255,0.25), transparent 65%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid rgba(255,255,255,0.11);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      background: rgba(255,255,255,0.03);
+      margin-bottom: 1rem;
+    }
+
+    h1, h2, h3 { line-height: 1.15; margin: 0 0 0.8rem; }
+    h1 { font-size: clamp(2.2rem, 4vw, 4.2rem); letter-spacing: -0.04em; }
+    h2 { font-size: clamp(1.35rem, 2.4vw, 2rem); }
+    h3 { font-size: 1.1rem; }
+
+    .lead {
+      color: var(--muted);
+      font-size: 1.08rem;
+      max-width: 60ch;
+      margin-bottom: 1.4rem;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      margin: 1.4rem 0 1.2rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.9rem 1.15rem;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border: none;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-top: 1.35rem;
+    }
+
+    .stat {
+      padding: 0.95rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.25rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .stat span { color: var(--muted); font-size: 0.92rem; }
+
+    .profile-card {
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .profile-top {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .avatar {
+      width: 86px;
+      height: 86px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #1d4fb8, #4d92ff);
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
+
+    .muted { color: var(--muted); }
+
+    section {
+      padding: 1rem 0 2rem;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 1rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .card {
+      padding: 1.25rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .tag {
+      display: inline-block;
+      margin-bottom: 0.7rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(47,124,255,0.14);
+      color: #dce9ff;
+      font-size: 0.8rem;
+      border: 1px solid rgba(104,163,255,0.18);
+    }
+
+    .list {
+      margin: 0.8rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+
+    .feature-video {
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      min-height: 360px;
+      background: linear-gradient(135deg, rgba(47,124,255,0.14), rgba(255,255,255,0.03));
+      display: grid;
+      place-items: center;
+      padding: 1.4rem;
+    }
+
+    .platforms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.7rem;
+    }
+
+    .platforms a {
+      padding: 0.8rem 1rem;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .platforms a:hover { background: rgba(255,255,255,0.07); }
+
+    .project-card p,
+    .card p { color: var(--muted); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1rem;
+    }
+
+    .contact-box {
+      padding: 1.3rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+    }
+
+    footer {
+      padding: 2.2rem 0 3rem;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid-3,
+      .grid-2,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mini-stats { grid-template-columns: 1fr; }
+      .hero { padding-top: 3.25rem; }
+    }
+
+    @media (max-width: 720px) {
+      .nav { flex-direction: column; align-items: flex-start; }
+      .hero-card, .profile-card, .card { padding: 1rem; }
+      h1 { font-size: 2.2rem; }
+      .feature-video { min-height: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-wrap">
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <div class="brand-badge">NT</div>
+        <span>Nick's Tech Tips</span>
+      </a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#video">Featured Video</a>
+        <a href="#projects">Projects</a>
+        <a href="#platforms">Platforms</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="panel hero-card">
+          <div class="eyebrow">Homelab • Cybersecurity • Real-World IT</div>
+          <h1>Practical tech from real experience.</h1>
+          <p class="lead">
+            Clear, practical technology content focused on home labs, cybersecurity, networking, and real-world IT. I document what I build, what I learn, and what actually works.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#video">Watch the latest video</a>
+            <a class="btn" href="#projects">View projects</a>
+            <a class="btn" href="#platforms">Follow my channels</a>
+          </div>
+          <div class="mini-stats">
+            <div class="stat">
+              <strong>Proxmox</strong>
+              <span>Virtualization, storage, and lab services</span>
+            </div>
+            <div class="stat">
+              <strong>Windows Server</strong>
+              <span>AD, member servers, and admin workflows</span>
+            </div>
+            <div class="stat">
+              <strong>Cisco</strong>
+              <span>Switching, VLANs, 10G, and routing labs</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel profile-card">
+          <div>
+            <div class="profile-top">
+              <div class="avatar">NT</div>
+              <div>
+                <h3 style="margin-bottom:0.2rem;">Nick's Tech Tips</h3>
+                <div class="muted">Nick Glover</div>
+              </div>
+            </div>
+            <p class="muted">
+              This site is the central hub for my videos, projects, and platform links. It is built to make it easy to follow my content, explore my lab work, and see the systems I am actively building.
+            </p>
+          </div>
+          <div class="platforms" style="margin-top:1rem;">
+            <a href="https://www.youtube.com/@realnickstechtips" target="_blank" rel="noreferrer">YouTube</a>
+            <a href="https://rumble.com/user/NicksTechTips" target="_blank" rel="noreferrer">Rumble</a>
+            <a href="https://x.com/NicksTechTips" target="_blank" rel="noreferrer">X</a>
+            <a href="mailto:contact@nickstechtips.com">Email</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>About</h2>
+            <p class="muted">A concise introduction to who I am, what I focus on, and what this site is built to share.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <span class="tag">Who I am</span>
+            <h3>Hands-on, practical, and focused on useful technology.</h3>
+            <p>
+              I am a lifelong technology enthusiast with a strong interest in home labs, cybersecurity, systems administration, and networking. I enjoy building real environments, troubleshooting real problems, and turning technical work into clear, useful explanations that others can follow.
+            </p>
+          </div>
+          <div class="card">
+            <span class="tag">What this site is for</span>
+            <h3>A home for content, projects, and documentation.</h3>
+            <p>
+              Nick’s Tech Tips exists to share practical technology content in a way that is straightforward and useful. Instead of being a simple placeholder page, this site serves as a central place for my videos, project write-ups, and ongoing work across multiple platforms.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="video">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Featured Video</h2>
+            <p class="muted">Featured content from my channel.</p>
+          </div>
+        </div>
+        <div class="card feature-video">
+          <script>!function(r,u,m,b,l,e){r._Rumble=b,r[b]||(r[b]=function(){(r[b]._=r[b]._||[]).push(arguments);if(r[b]._.length==1){l=u.createElement(m),e=u.getElementsByTagName(m)[0],l.async=1,l.src="https://rumble.com/embedJS/uxs7ud"+(arguments[1].video?'.'+arguments[1].video:'')+"/?url="+encodeURIComponent(location.href)+"&args="+encodeURIComponent(JSON.stringify([].slice.apply(arguments))),e.parentNode.insertBefore(l,e)}})}(window, document, "script", "Rumble");</script>
+          <div id="rumble_v762ouq"></div>
+          <script>Rumble("play", {"video":"v762ouq","div":"rumble_v762ouq"});</script>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Projects</h2>
+            <p class="muted">A few of the core areas I am building, testing, and documenting.</p>
+          </div>
+        </div>
+        <div class="grid-3">
+          <article class="card project-card">
+            <span class="tag">Virtualization</span>
+            <h3>Proxmox Home Lab</h3>
+            <p>I build and maintain a practical virtualization environment for testing services, operating systems, storage layouts, and infrastructure ideas. This is where I validate concepts before turning them into documented projects or content.</p>
+          </article>
+          <article class="card project-card">
+            <span class="tag">Windows</span>
+            <h3>Windows Server + Active Directory</h3>
+            <p>I use Windows Server in the lab to work with domain services, member server roles, management tools, and administrative workflows. It gives me a hands-on environment for learning and demonstrating real systems administration tasks.</p>
+          </article>
+          <article class="card project-card">
+            <span class="tag">Networking</span>
+            <h3>Cisco + 10G Network Build</h3>
+            <p>I use enterprise-style switching, VLANs, routing, and faster uplinks to build a more capable lab network. This project area covers both the design side and the practical lessons that come from putting the hardware to work.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="platforms">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Platforms</h2>
+            <p class="muted">Follow along across the platforms where I publish and share updates.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Where to follow</h3>
+            <p>Subscribe, follow, or check in on the platforms below to see new videos, updates, and future project content.</p>
+            <div class="platforms">
+              <a href="https://www.youtube.com/@realnickstechtips" target="_blank" rel="noreferrer">YouTube</a>
+              <a href="https://rumble.com/user/NicksTechTips" target="_blank" rel="noreferrer">Rumble</a>
+              <a href="https://x.com/NicksTechTips" target="_blank" rel="noreferrer">X / Twitter</a>
+            </div>
+          </div>
+          <div class="card">
+            <h3>What to expect</h3>
+            <ul class="list">
+              <li>Technology videos and channel updates</li>
+              <li>Project summaries and lab build notes</li>
+              <li>Practical walkthroughs, tips, and lessons learned</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Contact</h2>
+            <p class="muted">The easiest way to reach out for questions, feedback, or business inquiries.</p>
+          </div>
+        </div>
+        <div class="contact-grid">
+          <div class="card">
+            <h3>Get in touch</h3>
+            <p>If you have a question, a suggestion, or a business inquiry, email is the best place to start.</p>
+            <div class="contact-box">
+              <strong>Email:</strong> <a href="mailto:n@nickstechtips.com">n@nickstechtips.com</a>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Site focus</h3>
+            <ul class="list">
+              <li>Home lab projects and infrastructure builds</li>
+              <li>Cybersecurity, administration, and networking topics</li>
+              <li>Clear, practical content based on real experience</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © <span id="year"></span> Nick's Tech Tips. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
